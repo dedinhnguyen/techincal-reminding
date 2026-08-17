@@ -77,3 +77,4 @@ logs/
 scratch/
 tmp/
 temp/
+frontend/node_modules/
