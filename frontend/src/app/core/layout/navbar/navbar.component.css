@@ -1,0 +1,4 @@
+/* Navbar Component Specific Styles */
+:host {
+  display: block;
+}

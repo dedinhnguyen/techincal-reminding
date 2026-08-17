@@ -1,0 +1,210 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <!-- Header Banner -->
+  <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 shadow-xl">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold font-mono text-white tracking-tight">
+          Interactive Query & Pattern Builder
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+          Generate idiomatic Spring Data JPA Derived Queries, JPQL, Criteria API, Specifications, and MongoTemplate code in real-time.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Interactive Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Controls Panel (Left) -->
+    <div class="lg:col-span-5 space-y-5">
+      <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+          1. Query Configuration
+        </h2>
+
+        <!-- Entity & Field Input -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">Entity Name</label>
+            <input type="text" [(ngModel)]="request.entityName" (ngModelChange)="generate()"
+                   placeholder="e.g. User"
+                   class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">Target Field</label>
+            <input type="text" [(ngModel)]="request.fieldName" (ngModelChange)="generate()"
+                   placeholder="e.g. Email"
+                   class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Field Type & Operator -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">Field Type</label>
+            <select [(ngModel)]="request.fieldType" (ngModelChange)="generate()"
+                    class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none">
+              <option value="String">String</option>
+              <option value="Integer">Integer</option>
+              <option value="Long">Long</option>
+              <option value="BigDecimal">BigDecimal</option>
+              <option value="LocalDateTime">LocalDateTime</option>
+              <option value="UUID">UUID</option>
+              <option value="Status">Enum (Status)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">Operator</label>
+            <select [(ngModel)]="request.operator" (ngModelChange)="generate()"
+                    class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none">
+              <option value="EQUALS">Equals (=)</option>
+              <option value="CONTAINING_IGNORE_CASE">ContainingIgnoreCase (LIKE %val%)</option>
+              <option value="IN">In (Collection)</option>
+              <option value="BETWEEN">Between (Range)</option>
+              <option value="GREATER_THAN">Greater Than (&gt;)</option>
+              <option value="IS_NULL">Is Null</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sorting & Ordering -->
+        <div class="pt-3 border-t border-slate-800 space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="request.isOrderBy" (ngModelChange)="generate()"
+                   class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0" />
+            <span class="text-xs font-mono text-slate-300">Enable ORDER BY Clause</span>
+          </label>
+
+          @if (request.isOrderBy) {
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <input type="text" [(ngModel)]="request.orderByField" (ngModelChange)="generate()"
+                     placeholder="Order Field (e.g. createdAt)"
+                     class="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none" />
+              <select [(ngModel)]="request.orderDirection" (ngModelChange)="generate()"
+                      class="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                <option value="DESC">DESC (Descending)</option>
+                <option value="ASC">ASC (Ascending)</option>
+              </select>
+            </div>
+          }
+        </div>
+
+        <!-- Modifiers (Pageable, Async, TopN, Exists) -->
+        <div class="pt-3 border-t border-slate-800 space-y-2">
+          <span class="text-xs font-mono font-semibold uppercase text-slate-400 block mb-1">Execution Modifiers</span>
+          
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono text-slate-300">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" [(ngModel)]="request.isPageable" (ngModelChange)="generate()"
+                     class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0" />
+              <span>Pageable (Pagination)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" [(ngModel)]="request.isAsyncCompletableFuture" (ngModelChange)="generate()"
+                     class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0" />
+              <span>&#64;Async CompletableFuture</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" [(ngModel)]="request.isTopResult" (ngModelChange)="generate()"
+                     class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0" />
+              <span>findTopN Limit</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" [(ngModel)]="request.isCountOrExists" (ngModelChange)="generate()"
+                     class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0" />
+              <span>existsBy (Boolean)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Code Display (Right) -->
+    <div class="lg:col-span-7 space-y-5">
+      @if (queryBuilderService.generatedResult(); as res) {
+        <!-- Tab selector -->
+        <div class="flex items-center gap-1.5 p-1 bg-slate-900 rounded-xl border border-slate-800 overflow-x-auto text-xs font-mono">
+          <button (click)="activeTab.set('DERIVED')"
+                  [class.bg-emerald-500]="activeTab() === 'DERIVED'"
+                  [class.text-slate-950]="activeTab() === 'DERIVED'"
+                  [class.text-slate-300]="activeTab() !== 'DERIVED'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            Derived Query
+          </button>
+          <button (click)="activeTab.set('JPQL')"
+                  [class.bg-emerald-500]="activeTab() === 'JPQL'"
+                  [class.text-slate-950]="activeTab() === 'JPQL'"
+                  [class.text-slate-300]="activeTab() !== 'JPQL'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            &#64;Query JPQL
+          </button>
+          <button (click)="activeTab.set('NATIVE')"
+                  [class.bg-emerald-500]="activeTab() === 'NATIVE'"
+                  [class.text-slate-950]="activeTab() === 'NATIVE'"
+                  [class.text-slate-300]="activeTab() !== 'NATIVE'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            Native SQL
+          </button>
+          <button (click)="activeTab.set('CRITERIA')"
+                  [class.bg-emerald-500]="activeTab() === 'CRITERIA'"
+                  [class.text-slate-950]="activeTab() === 'CRITERIA'"
+                  [class.text-slate-300]="activeTab() !== 'CRITERIA'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            Criteria API
+          </button>
+          <button (click)="activeTab.set('SPEC')"
+                  [class.bg-emerald-500]="activeTab() === 'SPEC'"
+                  [class.text-slate-950]="activeTab() === 'SPEC'"
+                  [class.text-slate-300]="activeTab() !== 'SPEC'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            Specification
+          </button>
+          <button (click)="activeTab.set('MONGO')"
+                  [class.bg-emerald-500]="activeTab() === 'MONGO'"
+                  [class.text-slate-950]="activeTab() === 'MONGO'"
+                  [class.text-slate-300]="activeTab() !== 'MONGO'"
+                  class="px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap">
+            MongoTemplate
+          </button>
+        </div>
+
+        <!-- Code Viewer Card -->
+        <div class="rounded-xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
+          <div class="px-4 py-2.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              {{ getActiveTabLabel() }}
+            </span>
+            <button (click)="copyActiveCode(res)"
+                    class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-colors">
+              @if (isCopied()) {
+                <span class="text-emerald-400 font-bold">✓ Copied!</span>
+              } @else {
+                <span>Copy Code</span>
+              }
+            </button>
+          </div>
+
+          <div class="p-4 overflow-x-auto text-xs font-mono text-slate-100 bg-[#0b0f19]">
+            <pre><code>{{ getActiveCodeSnippet(res) }}</code></pre>
+          </div>
+        </div>
+
+        <!-- Explanation & Performance Tip -->
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs font-mono">
+          <div class="text-slate-300">
+            <span class="text-emerald-400 font-bold">Logic:</span> {{ res.explanation }}
+          </div>
+          <div class="p-3 rounded-lg bg-amber-950/40 border border-amber-800/60 text-amber-300">
+            {{ res.performanceTip }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

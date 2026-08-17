@@ -1,0 +1,27 @@
+<div class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans">
+  <!-- Navbar -->
+  <app-navbar />
+
+  <!-- Main Router Outlet -->
+  <main class="flex-1">
+    <router-outlet />
+  </main>
+
+  <!-- Global Command Palette Modal (Ctrl+K) -->
+  <app-command-palette />
+
+  <!-- Live Infrastructure & Cache HUD -->
+  <app-infra-hud />
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-6 text-center text-xs font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        DevCompanion &bull; Fullstack CheatHub &amp; Architecture Engine
+      </div>
+      <div class="text-slate-400">
+        Powered by Spring Boot 3.4 &bull; Angular 19 &bull; Redis &bull; Elasticsearch
+      </div>
+    </div>
+  </footer>
+</div>

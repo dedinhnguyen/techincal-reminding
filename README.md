@@ -1,93 +1,70 @@
-# save-token-project
+# Save Token Kit - Bộ Cấu Hình Tối Ưu Hóa Token & Quota Cho AI Agent
 
+Save Token Kit là bộ giải pháp đóng gói sẵn bao gồm **Rules (Quy tắc)** và **Skills (Kỹ năng nâng cao)** dành cho AI Agent (như Antigravity, Claude Code, v.v.). Bộ công cụ này giúp các mô hình ngôn ngữ lớn (Gemini, Claude, GPT, Codex...) hoạt động cực kỳ hiệu quả, tiết kiệm tối đa quota API và dung lượng token sử dụng bằng cách tối ưu hóa cách thức đọc/ghi tệp tin và duy trì ngữ cảnh.
 
+---
 
-## Getting started
+## 📦 Thành Phần Bộ Công Cụ
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Thư mục `.agents/` chứa cấu hình có thể cắm-và-chạy (plug-and-play):
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+1. **`rules/rule-save-token.md` (Quy tắc tối ưu luôn bật)**:
+   - Định nghĩa quy trình bắt buộc Agent phải tuân thủ để tránh đọc file dung lượng lớn và giảm thiểu việc phản hồi dư thừa.
+2. **`skills/save-token/SKILL.md` (Kỹ năng tối ưu hóa context)**:
+   - Hướng dẫn Agent các mẹo cụ thể về quản lý file, thiết lập file ignore và thực hiện chỉnh sửa cục bộ.
+3. **`skills/codegraph/SKILL.md` (Kỹ năng phân tích callgraph ngoại tuyến)**:
+   - Giúp Agent hiểu kiến trúc mã nguồn thông qua call graph và dependency graph mà không cần mở đọc toàn bộ codebase.
+4. **`skills/codebase-memory-mcp/SKILL.md` (Kỹ năng ghi nhớ ngữ cảnh)**:
+   - Hướng dẫn lưu trữ và truy vấn tri thức thông qua MCP memory server để tránh việc phân tích lại từ đầu.
+5. **`skills/autonomous-developer/SKILL.md` (Kỹ năng lập trình viên tự trị)**:
+   - Kích hoạt quy trình khép kín giúp Agent tự động đọc tài liệu, viết code, chạy test/build, tự sửa lỗi (self-debug) và đồng bộ tài liệu khi nhận lệnh `/agent-skill <yêu cầu>`.
+6. **`skills/git-workflow-automator/SKILL.md` (Kỹ năng tự động hóa Git)**:
+   - Tự động hóa việc tạo branch, commit chuẩn Conventional Commits, soạn thảo PR description và giải quyết conflicts.
+7. **`skills/api-docs-generator/SKILL.md` (Kỹ năng tự động tạo tài liệu API)**:
+   - Quét controllers/routes để tự động cập nhật hoặc tạo mới file Swagger/OpenAPI spec (YAML/JSON).
+8. **`skills/code-refactoring-optimizer/SKILL.md` (Kỹ năng tái cấu trúc mã nguồn)**:
+   - Phát hiện code smells, nợ kỹ thuật và tự động áp dụng các Design Patterns/SOLID principles một cách an toàn.
+9. **`skills/docker-composer-helper/SKILL.md` (Kỹ năng Docker)**:
+   - Tối ưu hóa file Dockerfile, Docker Compose, multi-stage builds và chẩn đoán log container tự động.
+10. **`skills/security-vulnerability-scanner/SKILL.md` (Kỹ năng quét lỗ hổng bảo mật)**:
+   - Rà soát tĩnh mã nguồn tìm OWASP Top 10, quét lỗi phụ thuộc (dependency vulnerabilities) và vá lỗi.
+11. **`skills/performance-profiler-analyser/SKILL.md` (Kỹ năng tối ưu hóa hiệu năng)**:
+   - Tìm kiếm nghẽn cổ chai, rò rỉ bộ nhớ, tối ưu hóa N+1 query và triển khai các chiến lược caching (Redis).
+12. **`skills/ci-cd-pipeline-orchestrator/SKILL.md` (Kỹ năng thiết lập CI/CD)**:
+   - Viết và gỡ lỗi cấu hình pipeline GitHub Actions/GitLab CI cho các công đoạn lint, test, build, deploy.
+13. **`skills/i18n-translator-manager/SKILL.md` (Kỹ năng quản lý đa ngôn ngữ)**:
+   - Trích xuất chuỗi text cứng UI, thiết lập cấu trúc tệp locale (JSON/YAML) và quản lý dịch thuật tự động.
 
-## Add your files
+### 🤖 Custom Agents
+14. **`agents/qa-tester/AGENT.md` (QA Tester Agent)**:
+   - Chuyển đổi vai trò của AI thành một kỹ sư kiểm thử tự động chuyên nghiệp (QA Automation & Security Researcher). Tự động phân tích nghiệp vụ, viết unit/integration test, chạy test suite, kiểm tra coverage và truy lùng các edge cases/lỗi bảo mật.
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+---
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/automation-legacy/ai-project-antigravity/save-token-project.git
-git branch -M main
-git push -uf origin main
-```
+## 🚀 Hướng Dẫn Tích Hợp Vào Dự Án Bất Kỳ
 
-## Integrate with your tools
+Để kích hoạt bộ tối ưu hóa này cho bất kỳ dự án mới nào của bạn, hãy chọn một trong hai cách dưới đây:
 
-* [Set up project integrations](https://gitlab.com/automation-legacy/ai-project-antigravity/save-token-project/-/settings/integrations)
+### Cách 1: Tích hợp cục bộ theo dự án (Khuyên dùng)
+Nếu bạn muốn bộ quy tắc này đi kèm mã nguồn dự án của bạn (để khi chia sẻ cho người khác họ cũng được tối ưu hóa tự động):
 
-## Collaborate with your team
+1. Sao chép toàn bộ thư mục `.agents` từ dự án này.
+2. Dán thư mục `.agents` vào thư mục gốc của dự án mới của bạn.
+3. Khi bạn khởi chạy AI Agent trong dự án đó, Agent sẽ tự động quét, nhận diện và nạp các quy tắc/kỹ năng tối ưu này.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### Cách 2: Tích hợp toàn cục (Global)
+Nếu bạn muốn áp dụng bộ tối ưu hóa này cho **TẤT CẢ** các dự án bạn mở trên máy tính mà không cần copy thư mục `.agents` vào từng dự án:
 
-## Test and Deploy
+1. Copy các file trong `.agents/rules/` vào thư mục cấu hình global của Agent trên máy bạn:
+   - **Đường dẫn mặc định**: `C:\Users\<Tên_User>\.gemini\config\rules\` (Hoặc append trực tiếp nội dung vào file `AGENTS.md` trong thư mục `C:\Users\<Tên_User>\.gemini\config\`).
+2. Copy các thư mục skill trong `.agents/skills/` vào thư mục skill global:
+   - **Đường dẫn mặc định**: `C:\Users\<Tên_User>\.gemini\config\skills\`
 
-Use the built-in continuous integration in GitLab.
+---
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## 🛠️ Hướng Dẫn Sử Dụng Chi Tiết
 
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Khi Agent đã nhận diện bộ cấu hình, bạn có thể yêu cầu:
+- `"Hãy sử dụng save-token skill để tối ưu hóa việc phân tích tệp này."`
+- `"Hãy dựng codegraph cho module Auth để hiểu luồng gọi hàm."`
+- Quy tắc `rule-save-token.md` sẽ tự động kích hoạt chế độ tiết kiệm token và quota cho Agent trong mỗi lượt trao đổi mà bạn không cần phải nhắc nhở thêm.

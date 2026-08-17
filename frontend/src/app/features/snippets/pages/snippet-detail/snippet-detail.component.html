@@ -1,0 +1,120 @@
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <!-- Back & Edit Navigation -->
+  <div class="flex items-center justify-between">
+    <a routerLink="/snippets" class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-emerald-400 transition-colors">
+      &larr; Back to all cheatsheets
+    </a>
+
+    @if (snippet(); as s) {
+      <div class="flex items-center gap-2">
+        <button (click)="toggleBookmark(s.id)"
+                class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono transition-colors flex items-center gap-1.5 hover:bg-slate-800"
+                [class.text-amber-400]="bookmarkService.isBookmarked(s.id)"
+                [class.text-slate-400]="!bookmarkService.isBookmarked(s.id)">
+          <span>{{ bookmarkService.isBookmarked(s.id) ? '★ Bookmarked' : '☆ Bookmark' }}</span>
+        </button>
+
+        <a [routerLink]="['/snippets/edit', s.id]"
+           class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-cyan-400 hover:bg-slate-800 transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit Snippet
+        </a>
+      </div>
+    }
+  </div>
+
+  @if (snippetService.isLoading()) {
+    <div class="py-16 text-center text-slate-400 font-mono">
+      Loading snippet details...
+    </div>
+  } @else {
+    @if (snippet(); as s) {
+      <!-- Snippet Header -->
+      <div class="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold"
+                  [class]="getTechBadgeClass(s.technology)">
+              {{ s.technology }}
+            </span>
+            <span class="px-2.5 py-1 rounded text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
+              {{ s.complexityLevel }}
+            </span>
+          </div>
+          <div class="text-xs font-mono text-slate-500">
+            Views: <span class="text-slate-300">{{ s.viewCount }}</span>
+          </div>
+        </div>
+
+        <h1 class="text-xl sm:text-3xl font-bold font-mono text-white tracking-tight">
+          {{ s.title }}
+        </h1>
+
+        <p class="text-sm text-slate-300">
+          {{ s.summary }}
+        </p>
+
+        @if (s.problemContext) {
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-xs font-mono text-amber-300/90">
+            <span class="font-bold text-amber-400">Problem Context:</span> {{ s.problemContext }}
+          </div>
+        }
+      </div>
+
+      <!-- Base Code Template -->
+      <div class="rounded-xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
+        <div class="px-4 py-2.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+          <span class="text-xs font-mono text-slate-400">Primary Code Template ({{ s.language }})</span>
+          <button (click)="copyText(s.codeTemplate)"
+                  class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition-colors">
+            Copy Template
+          </button>
+        </div>
+        <div class="p-4 overflow-x-auto text-xs font-mono text-slate-100 bg-[#0b0f19]">
+          <pre><code>{{ s.codeTemplate }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Variations Matrix -->
+      @if (s.variations.length > 0) {
+        <div class="space-y-4">
+          <h2 class="text-base font-bold font-mono text-white flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            Architectural Variations ({{ s.variations.length }})
+          </h2>
+
+          <div class="space-y-4">
+            @for (variation of s.variations; track variation.id) {
+              <div class="rounded-xl bg-slate-900 border border-slate-800 shadow-lg overflow-hidden">
+                <div class="px-4 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                  <span class="text-xs font-mono font-bold text-emerald-400">{{ variation.variationType }}</span>
+                  <button (click)="copyText(variation.codeSnippet)"
+                          class="text-xs font-mono text-slate-400 hover:text-white transition-colors">
+                    Copy
+                  </button>
+                </div>
+
+                <div class="p-4 bg-[#0b0f19] border-b border-slate-800 overflow-x-auto text-xs font-mono text-slate-200">
+                  <pre><code>{{ variation.codeSnippet }}</code></pre>
+                </div>
+
+                <div class="p-4 space-y-2 bg-slate-900/60 text-xs font-mono">
+                  <div class="text-slate-300">
+                    <span class="text-slate-400 font-semibold">Explanation:</span> {{ variation.explanation }}
+                  </div>
+                  @if (variation.prosAndCons) {
+                    <div class="p-2.5 rounded bg-slate-950 border border-slate-800 text-slate-300">
+                      {{ variation.prosAndCons }}
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  }
+</div>

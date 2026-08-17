@@ -1,0 +1,71 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <!-- Header -->
+  <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 shadow-xl">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold font-mono text-white tracking-tight">
+          Side-by-Side Paradigm Matrix
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+          Compare architectural decisions side-by-side with trade-offs, code samples, and performance considerations.
+        </p>
+      </div>
+    </div>
+
+    <!-- Topic Selector Tabs -->
+    <div class="mt-6 flex flex-wrap gap-2 pt-4 border-t border-slate-800">
+      @for (matrix of matrices; track matrix.id) {
+        <button (click)="selectedMatrixId.set(matrix.id)"
+                [class.bg-cyan-500]="selectedMatrixId() === matrix.id"
+                [class.text-slate-950]="selectedMatrixId() === matrix.id"
+                [class.text-slate-300]="selectedMatrixId() !== matrix.id"
+                [class.bg-slate-800]="selectedMatrixId() !== matrix.id"
+                class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all">
+          {{ matrix.title }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Comparison Columns -->
+  @if (currentMatrix(); as m) {
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      @for (col of m.columns; track col.name) {
+        <div class="rounded-xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden flex flex-col justify-between">
+          <!-- Top Info -->
+          <div class="p-4 border-b border-slate-800 bg-slate-950/60 space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold font-mono text-white">{{ col.name }}</h3>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-400 border border-slate-700">
+                {{ col.badge }}
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 font-mono">
+              <span class="text-emerald-400 font-semibold">When to use:</span> {{ col.useCase }}
+            </p>
+          </div>
+
+          <!-- Code Preview -->
+          <div class="p-3 bg-[#0b0f19] border-b border-slate-800 font-mono text-[11px] text-slate-200 overflow-x-auto min-h-[140px]">
+            <pre><code>{{ col.code }}</code></pre>
+          </div>
+
+          <!-- Pros & Cons -->
+          <div class="p-4 space-y-3 bg-slate-900/40 text-xs font-mono">
+            <div class="p-2.5 rounded bg-emerald-950/30 border border-emerald-900/50 text-emerald-300">
+              <span class="font-bold">PROS:</span> {{ col.pros }}
+            </div>
+            <div class="p-2.5 rounded bg-rose-950/30 border border-rose-900/50 text-rose-300">
+              <span class="font-bold">CONS:</span> {{ col.cons }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,40 @@
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:postgres}:${POSTGRES_PORT:5432}/${POSTGRES_DB:devcompanion}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+    mongodb:
+      uri: mongodb://${MONGO_USER:root}:${MONGO_PASSWORD:rootpassword}@${MONGO_HOST:mongodb}:${MONGO_PORT:27017}/${MONGO_DB:devcompanion}?authSource=admin
+    elasticsearch:
+      uris: http://${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}
+
+app:
+  elasticsearch:
+    enabled: true
+  mongodb:
+    enabled: true
+  redis:
+    enabled: true

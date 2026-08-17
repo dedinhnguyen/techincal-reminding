@@ -1,0 +1,102 @@
+@if (infraService.isHudOpen()) {
+  <div class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-slate-950/95 backdrop-blur-xl border-l border-slate-800 shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-200">
+    <!-- Header -->
+    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
+        <h3 class="text-base font-bold text-slate-100 font-mono tracking-tight">
+          Infrastructure & Cache HUD
+        </h3>
+      </div>
+      <button (click)="close()" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="mt-6 space-y-6">
+      @if (infraService.health(); as health) {
+        <!-- Services Grid -->
+        <div>
+          <h4 class="text-xs font-mono font-semibold uppercase text-slate-400 tracking-wider mb-3">
+            Service Connectivity
+          </h4>
+          <div class="space-y-2.5">
+            @for (entry of health.services | keyvalue; track entry.key) {
+              <div class="p-3 rounded-lg bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full"
+                        [class.bg-emerald-400]="entry.value?.includes('HEALTHY') || entry.value?.includes('ACTIVE')"
+                        [class.bg-amber-400]="entry.value?.includes('FALLBACK') || entry.value?.includes('STANDALONE')"
+                        [class.bg-rose-400]="entry.value?.includes('DOWN')">
+                  </span>
+                  <span class="text-xs font-mono font-medium uppercase text-slate-200">{{ entry.key }}</span>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400 truncate max-w-[200px]" [title]="entry.value">
+                  {{ entry.value }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Cache & Performance Stats -->
+        <div>
+          <h4 class="text-xs font-mono font-semibold uppercase text-slate-400 tracking-wider mb-3">
+            Spring Cache & Redis Metrics
+          </h4>
+          <div class="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="flex justify-between text-slate-300">
+              <span>Cache Implementation:</span>
+              <span class="text-emerald-400 font-semibold">{{ health.cacheStats['cacheType'] }}</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Active Caches:</span>
+              <span class="text-cyan-400">{{ health.cacheStats['activeCacheNames']?.join(', ') || 'categories, snippets' }}</span>
+            </div>
+            <div class="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400">
+              TTL: 15m default, 1h for category taxonomies. Serialized via Jackson2Json.
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Counts -->
+        <div>
+          <h4 class="text-xs font-mono font-semibold uppercase text-slate-400 tracking-wider mb-3">
+            Knowledge Base Volume
+          </h4>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-lg font-bold font-mono text-emerald-400">{{ health.totalSnippets }}</div>
+              <div class="text-[10px] text-slate-400 uppercase mt-0.5">Snippets</div>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-lg font-bold font-mono text-cyan-400">{{ health.totalCategories }}</div>
+              <div class="text-[10px] text-slate-400 uppercase mt-0.5">Categories</div>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-lg font-bold font-mono text-purple-400">{{ health.totalMongoTemplates }}</div>
+              <div class="text-[10px] text-slate-400 uppercase mt-0.5">Mongo Aggs</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button (click)="refresh()"
+                  class="w-full py-2.5 px-4 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh Infra State
+          </button>
+        </div>
+      } @else {
+        <div class="py-12 text-center text-slate-400 text-sm font-mono">
+          Loading infrastructure status...
+        </div>
+      }
+    </div>
+  </div>
+}

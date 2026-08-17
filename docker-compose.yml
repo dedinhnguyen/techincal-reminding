@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL 16
+  postgres:
+    image: postgres:16-alpine
+    container_name: devcompanion-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: devcompanion
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d devcompanion"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - devcompanion-network
+
+  # 2. Redis 7 Alpine
+  redis:
+    image: redis:7-alpine
+    container_name: devcompanion-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - devcompanion-network
+
+  # 3. MongoDB 7.0
+  mongodb:
+    image: mongo:7.0
+    container_name: devcompanion-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: devcompanion
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - devcompanion-network
+
+  # 4. Elasticsearch 8.13
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: devcompanion-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - devcompanion-network
+
+  # 5. Spring Boot 3.4 Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: devcompanion-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: devcompanion
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_USER: root
+      MONGO_PASSWORD: rootpassword
+      MONGO_DB: devcompanion
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ES_ENABLED: "true"
+      MONGO_ENABLED: "true"
+      REDIS_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    networks:
+      - devcompanion-network
+
+  # 6. Angular 19 Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: devcompanion-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    networks:
+      - devcompanion-network
+
+networks:
+  devcompanion-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongo_data:
+  es_data:
