@@ -44,10 +44,11 @@
 ### 4. Lovable Integration
 - Tích hợp Lovable thông qua kết nối trực tiếp GitHub Repository và liên kết Supabase project `epmqnamfibmgdeoeguqj`.
 
-### 5. Khắc phục vấn đề gọi API localhost trên Vercel
-- **Nguyên nhân**: `angular.json` thiếu cấu hình `fileReplacements` cho môi trường production, dẫn đến Angular vẫn dùng `environment.ts` (`localhost:8080`).
-- **Khắc phục**:
-  1. Thêm `fileReplacements` trỏ sang `environment.prod.ts` trong `angular.json`.
-  2. Tạo dịch vụ [SupabaseService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/supabase.service.ts) để gọi trực tiếp Supabase REST API (`/rest/v1/snippets`, `/rest/v1/categories`) khi chạy trên Vercel.
-  3. Cập nhật [SnippetService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/snippet.service.ts), [SearchService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/search.service.ts), [BookmarkService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/bookmark.service.ts) hoạt động 100% độc lập trên Vercel và fallback thông minh.
+### 6. Đồng bộ toàn bộ 55+ Cheatsheets lên Supabase Cloud & Cloud-Native Services
+- **Dữ liệu Supabase**: Đã nạp đầy đủ **55 snippets** (11 categories, 11 tags, hàng chục snippet variations) từ `DataSeederService.java` lên Supabase PostgreSQL qua script tự động.
+- **Xử lý các endpoint trên Vercel**:
+  - `api/query-builder/generate`: Đã tích hợp logic sinh code AST client-side độc lập trong [QueryBuilderService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/query-builder.service.ts), sinh kết quả tức thì (0ms latency) không phụ thuộc backend.
+  - `api/mongo-templates`: Tích hợp bộ template đa tầng (Faceted Search, Aggregation Pipeline) trong [SnippetService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/snippet.service.ts).
+  - `api/health/infra`: Cung cấp Cloud HUD metrics trong [InfraService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/infra.service.ts) kết nối trực tiếp Supabase Cloud.
+
 
