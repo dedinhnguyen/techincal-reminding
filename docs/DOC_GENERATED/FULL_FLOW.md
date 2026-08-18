@@ -41,6 +41,16 @@
 - **RxJS & Reactive Streams (7 Cheatsheets)**: Flattening operators (`switchMap`, `mergeMap`, `concatMap`, `exhaustMap`), `forkJoin` vs `combineLatest`, `zip` vs `withLatestFrom`, Error resilience exponential backoff retry, Search typeahead pipeline.
 - **SCSS & TailwindCSS v4 Modern Layouts (7 Cheatsheets)**: Responsive mixins, Glassmorphism, BEM + Tailwind, Complex responsive CSS Grid 12-col, Sticky auto-resizing toolbars, Theme switcher with CSS variables, Custom animated glowing borders.
 
+### Giai Đoạn 4: Triển Khai Cloud & Tích Hợp Nền Tảng (Supabase, Vercel, Lovable)
+- **Supabase Cloud Database**:
+  - Provisioning schema PostgreSQL 17 trên project `epmqnamfibmgdeoeguqj` (`db.epmqnamfibmgdeoeguqj.supabase.co`).
+  - Thiết lập RLS (Row Level Security), Table indexes và Seed data trực tiếp.
+  - Backend Spring Boot profile [application-supabase.yml](file:///e:/AI%20dev/techincal-reminding/backend/src/main/resources/application-supabase.yml).
+- **Vercel Frontend Deployment**:
+  - Cấu hình [frontend/vercel.json](file:///e:/AI%20dev/techincal-reminding/frontend/vercel.json) & [vercel.json](file:///e:/AI%20dev/techincal-reminding/vercel.json) cho Angular SPA build & dynamic client-side routing.
+- **Lovable Integration**:
+  - Hướng dẫn đồng bộ GitHub Repository và liên kết Supabase project cho Lovable.dev.
+
 ---
 
 ## 📁 Danh Mục Tài Liệu Hướng Dẫn Kỹ Thuật (Engineering Guides)

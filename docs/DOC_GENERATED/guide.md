@@ -174,3 +174,34 @@ Content-Type: application/json
    - Sử dụng `effect(() => console.log('Current state:', this.mySignal()))` hoặc Angular DevTools Extension trên Chrome để theo dõi sự biến đổi của Signals trong component tree.
 3. **Debug RxJS Streams**:
    - Đặt operator `tap(val => console.log('Emitted:', val))` trước `switchMap` / `subscribe` để theo dõi giá trị của stream.
+
+---
+
+## ☁️ 7. Hướng Dẫn Triển Khai Lên Cloud (Supabase, Vercel, Lovable)
+
+### 1. Supabase PostgreSQL
+- **Host**: `db.epmqnamfibmgdeoeguqj.supabase.co` (PostgreSQL 17)
+- **Khởi chạy Spring Boot kết nối Supabase**:
+  ```powershell
+  cd backend
+  $env:SPRING_PROFILES_ACTIVE="supabase"
+  $env:SUPABASE_DB_PASSWORD="<YOUR_SUPABASE_PASSWORD>"
+  .\mvnw.cmd spring-boot:run
+  ```
+
+### 2. Triển khai Frontend lên Vercel
+- **Cấu hình sẵn có**: [`frontend/vercel.json`](file:///e:/AI%20dev/techincal-reminding/frontend/vercel.json) & [`vercel.json`](file:///e:/AI%20dev/techincal-reminding/vercel.json)
+- **Triển khai qua CLI**:
+  ```powershell
+  cd frontend
+  npx vercel
+  ```
+- **Triển khai qua GitHub Integration**:
+  - Đẩy code lên GitHub (`git push origin main`).
+  - Truy cập [vercel.com/new](https://vercel.com/new), Import repo, chọn Root Directory là `frontend` hoặc để mặc định root với file `vercel.json` đã cấu hình.
+
+### 3. Tích hợp Lovable (Lovable.dev)
+- **Bước 1**: Đẩy commit lên GitHub repository của bạn.
+- **Bước 2**: Truy cập **Lovable.dev** -> Chọn **Import from GitHub** -> Chọn repository này.
+- **Bước 3**: Trong phần Supabase Integration trên Lovable, liên kết Project Ref: `epmqnamfibmgdeoeguqj` và Anonymous Key để Lovable tự động truy vấn dữ liệu từ database.
+
