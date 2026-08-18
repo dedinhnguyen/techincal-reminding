@@ -4,83 +4,88 @@
     <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" (click)="close()"></div>
 
     <!-- Modal Box -->
-    <div class="relative w-full max-w-2xl rounded-xl glass-dropdown border border-slate-700 shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
+    <div class="relative w-full max-w-2xl rounded-xl glass-dropdown border border-[var(--border-medium)] shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150 bg-[var(--bg-card)] text-[var(--text-primary)]">
       <!-- Input Header -->
-      <div class="flex items-center px-4 border-b border-slate-800 bg-slate-950/90">
+      <div class="flex items-center px-4 border-b border-[var(--border-subtle)] bg-[var(--bg-card)]">
         <svg class="w-5 h-5 text-emerald-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input #searchInput
                type="text"
-               [(ngModel)]="query"
+               [ngModel]="query()"
                (ngModelChange)="onQueryChange($event)"
                placeholder="Search cheatsheets, derived queries, Stream API, Signals, RxJS..."
-               class="w-full py-4 bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none font-mono"
+               class="w-full py-4 bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-dim)] focus:outline-none font-mono"
                autofocus />
-        <kbd class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-400 font-mono border border-slate-700">ESC</kbd>
+        <kbd class="px-2 py-1 text-[10px] rounded bg-[var(--bg-card-elevated)] text-[var(--text-muted)] font-mono border border-[var(--border-subtle)]">ESC</kbd>
       </div>
 
       <!-- Quick Navigation Actions -->
-      <div class="px-4 py-2 bg-slate-900/60 border-b border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+      <div class="px-4 py-2 bg-[var(--bg-card-elevated)] border-b border-[var(--border-subtle)] flex items-center justify-between text-xs text-[var(--text-muted)] font-mono">
         <div class="flex items-center gap-3">
-          <span>Engine: <span class="text-emerald-400 font-semibold">{{ searchService.searchResponse()?.engineUsed || 'ELASTICSEARCH / JPA' }}</span></span>
+          <span>Engine: <span class="text-emerald-500 dark:text-emerald-400 font-semibold">{{ searchService.searchResponse()?.engineUsed || 'ELASTICSEARCH / JPA' }}</span></span>
           @if (searchService.searchResponse(); as res) {
-            <span>Took: <span class="text-cyan-400">{{ res.tookMillis }}ms</span></span>
+            <span>Took: <span class="text-cyan-500 dark:text-cyan-400">{{ res.tookMillis }}ms</span></span>
           }
         </div>
         <div class="flex items-center gap-2">
-          <button (click)="navigateTo('/query-builder')" class="hover:text-emerald-300 transition-colors">
+          <button (click)="navigateTo('/query-builder')" class="hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors">
             [JPA Query Builder &rarr;]
           </button>
         </div>
       </div>
 
       <!-- Results List -->
-      <div class="max-h-96 overflow-y-auto p-2 divide-y divide-slate-800/50">
+      <div class="max-h-96 overflow-y-auto p-2 divide-y divide-[var(--border-subtle)]">
         @if (searchService.isSearching()) {
-          <div class="py-8 text-center text-slate-400 text-sm font-mono flex items-center justify-center gap-2">
+          <div class="py-8 text-center text-[var(--text-muted)] text-sm font-mono flex items-center justify-center gap-2">
             <div class="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
             Searching index...
           </div>
         } @else if (results().length > 0) {
           @for (item of results(); track item.id) {
             <div (click)="selectSnippet(item)"
-                 class="p-3 rounded-lg hover:bg-slate-800/80 cursor-pointer transition-all group flex items-start justify-between gap-3">
+                 class="p-3 rounded-lg hover:bg-[var(--bg-card-elevated)] cursor-pointer transition-all group flex items-start justify-between gap-3">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
                   <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold tracking-wider"
                         [class]="getTechBadgeClass(item.technology)">
                     {{ item.technology }}
                   </span>
-                  <h4 class="text-sm font-medium text-slate-200 group-hover:text-emerald-400 transition-colors truncate">
+                  <h4 class="text-sm font-medium text-[var(--text-primary)] group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors truncate">
                     {{ item.title }}
                   </h4>
                 </div>
-                <p class="text-xs text-slate-400 mt-1 line-clamp-1">
+                <p class="text-xs text-[var(--text-muted)] mt-1 line-clamp-1">
                   {{ item.summary }}
                 </p>
               </div>
-              <div class="text-[11px] font-mono text-slate-500 whitespace-nowrap pt-1">
-                {{ item.complexityLevel }}
-              </div>
+              <span class="text-xs text-[var(--text-dim)] font-mono self-center shrink-0">
+                &rarr;
+              </span>
             </div>
           }
-        } @else if (query().length > 1) {
-          <div class="py-8 text-center text-slate-400 text-sm font-mono">
-            No matching snippets found for "<span class="text-slate-200">{{ query() }}</span>".
+        } @else if (query().trim()) {
+          <div class="py-8 text-center text-[var(--text-muted)] text-sm font-mono">
+            No snippets found matching "{{ query() }}"
           </div>
         } @else {
-          <div class="p-4 text-xs text-slate-400 space-y-2 font-mono">
-            <p class="text-slate-500 font-semibold uppercase text-[10px]">Popular Cheat Queries:</p>
-            <div class="flex flex-wrap gap-1.5">
-              <button (click)="searchQuick('Derived Query')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">JPA Derived Queries</button>
-              <button (click)="searchQuick('N+1')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">Hibernate N+1</button>
-              <button (click)="searchQuick('Virtual Threads')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">Virtual Threads</button>
-              <button (click)="searchQuick('Control Flow')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">Angular 19 Control Flow</button>
-              <button (click)="searchQuick('switchMap')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">RxJS switchMap</button>
-            </div>
+          <div class="py-6 px-4 text-xs font-mono text-[var(--text-dim)] flex flex-col gap-1.5">
+            <span class="font-semibold text-[var(--text-secondary)]">💡 Quick Navigation Tips:</span>
+            <span>&bull; Type <code class="text-emerald-500 dark:text-emerald-400 font-bold">jpa</code> or <code class="text-emerald-500 dark:text-emerald-400 font-bold">sql</code> to find database snippets</span>
+            <span>&bull; Type <code class="text-cyan-500 dark:text-cyan-400 font-bold">signals</code> or <code class="text-cyan-500 dark:text-cyan-400 font-bold">rxjs</code> to find Angular reactive templates</span>
+            <span>&bull; Type <code class="text-amber-500 dark:text-amber-400 font-bold">stream</code> or <code class="text-amber-500 dark:text-amber-400 font-bold">threads</code> to find Java 21 concurrency recipes</span>
           </div>
         }
+      </div>
+
+      <!-- Footer Help -->
+      <div class="px-4 py-2 bg-[var(--bg-card-elevated)] border-t border-[var(--border-subtle)] flex items-center justify-between text-[11px] font-mono text-[var(--text-dim)]">
+        <div class="flex items-center gap-2">
+          <span>Navigate: <kbd class="px-1 py-0.5 rounded bg-[var(--bg-app)] border border-[var(--border-subtle)]">&uarr;</kbd> <kbd class="px-1 py-0.5 rounded bg-[var(--bg-app)] border border-[var(--border-subtle)]">&darr;</kbd></span>
+          <span>Select: <kbd class="px-1 py-0.5 rounded bg-[var(--bg-app)] border border-[var(--border-subtle)]">&crarr;</kbd></span>
+        </div>
+        <span>DevCompanion Search Engine</span>
       </div>
     </div>
   </div>

@@ -5,17 +5,43 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-elevated: #f1f5f9;
+  --bg-code: #0f172a;
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+}
+
+html.dark,
+:root[data-theme="dark"] {
   color-scheme: dark;
+  --bg-app: #090d16;
+  --bg-card: #0f172a;
+  --bg-card-elevated: #1e293b;
+  --bg-code: #0b0f19;
+  --border-subtle: #1e293b;
+  --border-medium: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #090d16;
-  color: #f1f5f9;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom scrollbars */
@@ -24,26 +50,27 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: var(--bg-code);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--border-medium);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--text-dim);
 }
 
 /* Prism syntax highlight adjustments */
 pre[class*="language-"] {
-  background: #0f172a !important;
-  border: 1px solid #1e293b !important;
+  background: #0b0f19 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
   margin: 0 !important;
   padding: 1rem !important;
   font-family: 'JetBrains Mono', monospace !important;
   font-size: 0.875rem !important;
   line-height: 1.6 !important;
+  color: #e2e8f0 !important;
 }
 
 code[class*="language-"] {
@@ -53,14 +80,24 @@ code[class*="language-"] {
 
 /* Glassmorphic elements */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.75);
+  background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .glass-dropdown {
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+html.light .glass-dropdown {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(203, 213, 225, 0.9);
 }

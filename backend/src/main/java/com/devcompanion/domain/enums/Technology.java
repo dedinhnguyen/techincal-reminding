@@ -9,6 +9,7 @@ public enum Technology {
     TYPESCRIPT,
     SQL_POSTGRES,
     TAILWIND_CSS,
+    SCSS,
     REDIS,
     ELASTICSEARCH,
     DOCKER

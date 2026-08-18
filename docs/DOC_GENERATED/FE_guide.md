@@ -61,7 +61,21 @@ Tất cả các dịch vụ (Services) giao tiếp Backend đều sử dụng bi
 
 ---
 
-## 🚦 3. Cấu Trúc Định Tuyến Tính Năng (Feature Sub-Routing) & Quản Lý URL CRUD Đa Tham Số
+## 🎨 3. Hệ Thống Chế Độ Sáng / Tối (Light & Dark Theme System)
+
+Ứng dụng tích hợp hệ thống chuyển đổi giao diện Sáng/Tối linh hoạt:
+- **`ThemeService`** ([`src/app/services/theme.service.ts`](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/theme.service.ts)):
+  - Quản lý trạng thái giao diện qua Angular 19 Signal: `themeMode = signal<'dark' | 'light' | 'system'>()`.
+  - Tự động lưu lựa chọn vào `localStorage` ('devcompanion_theme').
+  - Lắng nghe sự thay đổi của OS System (`prefers-color-scheme: dark`).
+  - Gắn class `.dark` / `.light` và thuộc tính `data-theme` lên thẻ `<html>`.
+- **CSS Custom Properties & SCSS Tokens** ([`src/styles.css`](file:///e:/AI%20dev/techincal-reminding/frontend/src/styles.css), [`src/styles/_variables.scss`](file:///e:/AI%20dev/techincal-reminding/frontend/src/styles/_variables.scss)):
+  - Biến CSS: `--bg-app`, `--bg-card`, `--bg-card-elevated`, `--text-primary`, `--border-subtle`.
+  - Nút chuyển đổi nhanh Dark/Light (Sun ☀️ / Moon 🌙) ngay trên thanh [`NavbarComponent`](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/core/layout/navbar/navbar.component.html).
+
+---
+
+## 🚦 4. Cấu Trúc Định Tuyến Tính Năng (Feature Sub-Routing) & Quản Lý URL CRUD Đa Tham Số
 
 Mỗi feature module sở hữu một file route con riêng biệt (`feature.routes.ts`), cho phép quản lý CRUD trên cùng gốc URL nhưng khác params:
 

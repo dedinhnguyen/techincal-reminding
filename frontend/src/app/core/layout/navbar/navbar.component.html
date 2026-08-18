@@ -1,71 +1,94 @@
-<header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800 bg-[#090d16]/80 backdrop-blur-md">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+<header class="navbar-header">
+  <div class="navbar-container">
     <!-- Logo & Title -->
-    <div class="flex items-center gap-3">
-      <a routerLink="/" class="flex items-center gap-2 group">
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 p-0.5 shadow-glow-emerald transition-transform group-hover:scale-105">
-          <div class="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center font-mono font-bold text-emerald-400 text-base">
+    <div class="navbar-left">
+      <a routerLink="/" class="logo-group">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon-inner">
             &gt;_
           </div>
         </div>
-        <div>
-          <span class="text-lg font-bold tracking-tight text-white flex items-center gap-1.5 font-mono">
-            Dev<span class="text-emerald-400">Companion</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/60 font-sans">v19</span>
+        <div class="logo-text-group">
+          <span class="logo-title">
+            Dev<span class="logo-accent">Companion</span>
+            <span class="version-tag">v19</span>
           </span>
         </div>
       </a>
 
       <!-- Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 ml-6 text-sm font-medium">
-        <a routerLink="/snippets" routerLinkActive="bg-slate-800 text-emerald-400 font-semibold" [routerLinkActiveOptions]="{exact: true}"
-           class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
+      <nav class="nav-links">
+        <a routerLink="/snippets" routerLinkActive="nav-link--active" [routerLinkActiveOptions]="{exact: true}"
+           class="nav-link">
           Cheatsheets
         </a>
-        <a routerLink="/snippets/new" routerLinkActive="bg-slate-800 text-emerald-400 font-semibold"
-           class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1">
-          <span class="text-emerald-400">+</span> New Snippet
+        <a routerLink="/snippets/new" routerLinkActive="nav-link--active"
+           class="nav-link nav-link--highlight">
+          <span class="plus-icon">+</span> New Snippet
         </a>
-        <a routerLink="/query-builder" routerLinkActive="bg-slate-800 text-emerald-400 font-semibold"
-           class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
+        <a routerLink="/query-builder" routerLinkActive="nav-link--active"
+           class="nav-link">
           Query Builder
         </a>
-        <a routerLink="/comparison" routerLinkActive="bg-slate-800 text-emerald-400 font-semibold"
-           class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
+        <a routerLink="/comparison" routerLinkActive="nav-link--active"
+           class="nav-link">
           Comparison Matrix
         </a>
-        <a routerLink="/mongo-templates" routerLinkActive="bg-slate-800 text-emerald-400 font-semibold"
-           class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
+        <a routerLink="/mongo-templates" routerLinkActive="nav-link--active"
+           class="nav-link">
           MongoDB Aggregations
         </a>
       </nav>
     </div>
 
     <!-- Right Action Items -->
-    <div class="flex items-center gap-2.5">
+    <div class="navbar-right">
       <!-- Command Palette Trigger -->
       <button (click)="openCommandPalette()"
-              class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/70 text-slate-400 hover:text-slate-200 hover:border-emerald-500/50 hover:bg-slate-800/80 transition-all text-xs font-mono group shadow-sm">
-        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              type="button"
+              class="command-btn">
+        <svg class="w-3.5 h-3.5 search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <span class="hidden sm:inline">Search snippets...</span>
-        <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-400 group-hover:border-emerald-500/40">Ctrl K</kbd>
+        <span class="search-text">Search snippets...</span>
+        <kbd class="kbd-badge">Ctrl K</kbd>
+      </button>
+
+      <!-- Theme Switcher Toggle Button (Light / Dark) -->
+      <button (click)="toggleTheme()"
+              type="button"
+              class="theme-toggle-btn"
+              [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+              aria-label="Toggle Light/Dark Theme">
+        @if (themeService.isDark()) {
+          <!-- Moon Icon when in Dark Mode -->
+          <svg class="theme-icon text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        } @else {
+          <!-- Sun Icon when in Light Mode -->
+          <svg class="theme-icon text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        }
       </button>
 
       <!-- Swagger Docs Link -->
       <a href="/swagger-ui.html" target="_blank"
-         class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-emerald-300 hover:border-slate-700 text-xs font-mono transition-colors"
+         class="swagger-link"
          title="Open Swagger OpenAPI Documentation">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Swagger</span>
+        <span class="status-dot status-dot--emerald"></span>
+        <span class="swagger-text">Swagger</span>
       </a>
 
       <!-- Infra Status HUD Trigger -->
       <button (click)="toggleInfraHud()"
-              class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-white hover:border-cyan-500/60 transition-colors font-mono">
-        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-        <span class="hidden sm:inline">Infra HUD</span>
+              type="button"
+              class="hud-btn">
+        <span class="status-dot status-dot--cyan"></span>
+        <span class="hud-text">Infra HUD</span>
       </button>
     </div>
   </div>

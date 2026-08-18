@@ -41,7 +41,10 @@ export type VariationType =
   | 'SQL_WINDOW_FUNCTION'
   | 'SQL_CTE_RECURSIVE'
   | 'SQL_JSONB'
-  | 'SQL_INDEXING';
+  | 'SQL_INDEXING'
+  | 'SCSS_MIXIN'
+  | 'SCSS_FUNCTION'
+  | 'SCSS_BEM';
 
 export interface Tag {
   id: string;

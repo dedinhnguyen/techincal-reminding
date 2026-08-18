@@ -1,0 +1,90 @@
+<div class="snippet-card">
+  <!-- Card Header -->
+  <div class="snippet-card__header">
+    <div class="snippet-card__title-group">
+      <span class="badge" [ngClass]="'badge--' + snippet().technology.toLowerCase()">
+        {{ snippet().technology }}
+      </span>
+      <span class="badge badge--complexity">
+        {{ snippet().complexityLevel }}
+      </span>
+      <a [routerLink]="['/snippets', snippet().id]" class="snippet-card__title-link">
+        <h3 class="snippet-card__title">{{ snippet().title }}</h3>
+      </a>
+    </div>
+
+    <div class="snippet-card__actions">
+      <!-- Bookmark Toggle Button -->
+      <button
+        type="button"
+        class="bookmark-btn"
+        [class.bookmark-btn--active]="isBookmarked()"
+        (click)="toggleBookmark($event)"
+        title="Bookmark cheatsheet">
+        @if (isBookmarked()) {
+          <span class="star-icon">★</span>
+        } @else {
+          <span class="star-icon">☆</span>
+        }
+      </button>
+
+      <!-- Copy Button -->
+      <button
+        type="button"
+        class="copy-btn"
+        [class.copy-btn--copied]="copied()"
+        (click)="copyCode($event)"
+        aria-label="Copy code to clipboard">
+        @if (copied()) {
+          <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Copied!</span>
+        } @else {
+          <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          <span>Copy</span>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary / Context -->
+  <p class="snippet-card__summary">{{ snippet().summary }}</p>
+
+  <!-- Variations Tabs (e.g., Derived Query vs JPQL vs Native vs Criteria) -->
+  @if (snippet().variations && snippet().variations.length > 1) {
+    <div class="snippet-card__tabs">
+      @for (variation of snippet().variations; track variation.id; let i = $index) {
+        <button
+          type="button"
+          class="tab-btn"
+          [class.tab-btn--active]="selectedTab() === i"
+          (click)="selectTab(i, $event)">
+          {{ variation.variationType }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Code Display Area -->
+  <div class="snippet-card__code-wrapper">
+    <pre class="code-block"><code [attr.data-language]="snippet().language">{{ currentVariation()?.codeSnippet || snippet().codeTemplate }}</code></pre>
+  </div>
+
+  <!-- Explanation Footer -->
+  @if (currentVariation()?.explanation) {
+    <div class="snippet-card__footer">
+      <p class="explanation-text"><strong>Pro Tip:</strong> {{ currentVariation()?.explanation }}</p>
+    </div>
+  }
+
+  <!-- Inspect Link -->
+  <div class="snippet-card__bottom-bar">
+    <span class="views-count">Views: {{ snippet().viewCount }}</span>
+    <a [routerLink]="['/snippets', snippet().id]" class="inspect-link">
+      Inspect Full Details &rarr;
+    </a>
+  </div>
+</div>

@@ -3,13 +3,14 @@ import { RouterLink } from '@angular/router';
 import { SnippetService } from '../../../../services/snippet.service';
 import { BookmarkService } from '../../../../services/bookmark.service';
 import { ComplexityLevel, Technology } from '../../../../models/snippet.model';
+import { SnippetCardComponent } from '../../components/snippet-card/snippet-card.component';
 
 @Component({
   selector: 'app-snippet-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, SnippetCardComponent],
   templateUrl: './snippet-list.component.html',
-  styleUrl: './snippet-list.component.css',
+  styleUrls: ['./snippet-list.component.scss'],
 })
 export class SnippetListComponent implements OnInit {
   readonly snippetService = inject(SnippetService);
@@ -27,8 +28,6 @@ export class SnippetListComponent implements OnInit {
     { label: 'Modern Java 21', value: 'JAVA' as const },
     { label: 'Angular 19+', value: 'ANGULAR' as const },
     { label: 'TypeScript', value: 'TYPESCRIPT' as const },
-    { label: 'TailwindCSS', value: 'TAILWIND_CSS' as const },
-    { label: 'Redis Cache', value: 'REDIS' as const },
   ];
 
   ngOnInit(): void {
@@ -57,9 +56,7 @@ export class SnippetListComponent implements OnInit {
     this.snippetService.loadSnippets(tech, comp).subscribe();
   }
 
-  toggleBookmark(snippetId: string, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
+  handleBookmarkToggle(snippetId: string): void {
     this.bookmarkService.toggleBookmark(snippetId).subscribe();
   }
 
@@ -69,29 +66,5 @@ export class SnippetListComponent implements OnInit {
       return all.filter((s) => this.bookmarkService.isBookmarked(s.id));
     }
     return all;
-  }
-
-  getTechBadgeClass(tech: string): string {
-    switch (tech) {
-      case 'SPRING_DATA_JPA':
-      case 'SPRING_BOOT':
-        return 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/80';
-      case 'SQL_POSTGRES':
-        return 'bg-cyan-950/80 text-cyan-400 border border-cyan-800/80';
-      case 'SPRING_DATA_MONGODB':
-        return 'bg-green-950/80 text-green-400 border border-green-800/80';
-      case 'JAVA':
-        return 'bg-amber-950/80 text-amber-400 border border-amber-800/80';
-      case 'ANGULAR':
-        return 'bg-rose-950/80 text-rose-400 border border-rose-800/80';
-      case 'TYPESCRIPT':
-        return 'bg-blue-950/80 text-blue-400 border border-blue-800/80';
-      case 'TAILWIND_CSS':
-        return 'bg-sky-950/80 text-sky-400 border border-sky-800/80';
-      case 'REDIS':
-        return 'bg-red-950/80 text-red-400 border border-red-800/80';
-      default:
-        return 'bg-slate-800 text-slate-300 border border-slate-700';
-    }
   }
 }

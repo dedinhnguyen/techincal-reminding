@@ -20,6 +20,11 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "assets": [
               {
                 "glob": "**/*",

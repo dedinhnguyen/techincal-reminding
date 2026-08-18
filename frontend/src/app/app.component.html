@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans">
+<div class="min-h-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-emerald-500 selection:text-slate-950 font-sans transition-colors duration-200">
   <!-- Navbar -->
   <app-navbar />
 
@@ -14,12 +14,12 @@
   <app-infra-hud />
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-6 text-center text-xs font-mono text-slate-500">
+  <footer class="border-t border-[var(--border-subtle)] bg-[var(--bg-card)] py-6 text-center text-xs font-mono text-[var(--text-muted)] transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
       <div>
         DevCompanion &bull; Fullstack CheatHub &amp; Architecture Engine
       </div>
-      <div class="text-slate-400">
+      <div class="text-[var(--text-dim)]">
         Powered by Spring Boot 3.4 &bull; Angular 19 &bull; Redis &bull; Elasticsearch
       </div>
     </div>

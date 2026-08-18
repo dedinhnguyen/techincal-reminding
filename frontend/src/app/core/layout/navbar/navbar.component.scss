@@ -1,0 +1,245 @@
+@use 'variables' as var;
+@use 'mixins' as mix;
+
+.navbar-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  width: 100%;
+  border-bottom: 1px solid var.$border-subtle;
+  background-color: var.$bg-card;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var.$transition-fast;
+}
+
+.navbar-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @include mix.respond-to('sm') {
+    padding: 0 1.5rem;
+  }
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover .logo-icon-wrapper {
+    transform: scale(1.05);
+  }
+}
+
+.logo-icon-wrapper {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, var.$primary-emerald, var.$primary-cyan);
+  padding: 2px;
+  transition: transform var.$transition-fast;
+}
+
+.logo-icon-inner {
+  width: 100%;
+  height: 100%;
+  background: #090d16;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var.$font-mono;
+  font-weight: 700;
+  color: var.$primary-emerald;
+  font-size: 0.95rem;
+}
+
+.logo-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var.$font-mono;
+  color: var.$text-primary;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.logo-accent {
+  color: var.$primary-emerald;
+}
+
+.version-tag {
+  font-size: 0.65rem;
+  font-family: var.$font-sans;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  background: rgba(16, 185, 129, 0.15);
+  color: var.$primary-emerald;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+
+  @include mix.respond-to('md') {
+    display: flex;
+  }
+}
+
+.nav-link {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.825rem;
+  font-family: var.$font-mono;
+  color: var.$text-muted;
+  text-decoration: none;
+  transition: all var.$transition-fast;
+
+  &:hover {
+    color: var.$text-primary;
+    background: var.$bg-card-elevated;
+  }
+
+  &--active {
+    color: var.$primary-emerald;
+    font-weight: 600;
+    background: var.$bg-card-elevated;
+  }
+
+  &--highlight {
+    color: var.$primary-cyan;
+    &:hover {
+      color: var.$text-primary;
+    }
+  }
+
+  .plus-icon {
+    color: var.$primary-emerald;
+    font-weight: 700;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.command-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var.$bg-card-elevated;
+  border: 1px solid var.$border-subtle;
+  color: var.$text-muted;
+  font-family: var.$font-mono;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var.$transition-fast;
+
+  &:hover {
+    color: var.$text-primary;
+    border-color: var.$border-medium;
+    background: var.$bg-card;
+  }
+
+  .search-icon {
+    color: var.$text-dim;
+  }
+
+  .search-text {
+    display: none;
+    @include mix.respond-to('sm') {
+      display: inline;
+    }
+  }
+
+  .kbd-badge {
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    background: var.$bg-app;
+    border: 1px solid var.$border-subtle;
+    font-size: 0.65rem;
+    color: var.$text-dim;
+  }
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background: var.$bg-card-elevated;
+  border: 1px solid var.$border-subtle;
+  cursor: pointer;
+  transition: all var.$transition-fast;
+
+  &:hover {
+    background: var.$bg-card;
+    border-color: var.$border-medium;
+    transform: scale(1.05);
+  }
+
+  .theme-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+}
+
+.swagger-link, .hud-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  background: var.$bg-card-elevated;
+  border: 1px solid var.$border-subtle;
+  color: var.$text-secondary;
+  font-family: var.$font-mono;
+  font-size: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var.$transition-fast;
+
+  &:hover {
+    color: var.$text-primary;
+    border-color: var.$border-medium;
+  }
+}
+
+.status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+
+  &--emerald {
+    background: var.$primary-emerald;
+    box-shadow: 0 0 8px var.$primary-emerald;
+  }
+
+  &--cyan {
+    background: var.$primary-cyan;
+    box-shadow: 0 0 8px var.$primary-cyan;
+  }
+}

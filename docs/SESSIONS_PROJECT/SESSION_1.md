@@ -3,18 +3,21 @@
 ## 🏗️ 1. Kiến Trúc & Thiết Kế
 Phiên làm việc đầu tiên khởi tạo và hoàn thiện toàn diện ứng dụng **DevCompanion (Fullstack CheatHub)**:
 - **Backend (Spring Boot 3.4 & Java 21)**:
-  - Clean Layered Architecture (`controller`, `service`, `repository`, `domain`, `dto`, `exception`, `config`).
+  - Clean Layered Architecture (`controller`, `service`, `service/impl`, `repository`, `domain`, `dto`, `exception`, `config`).
   - Đa tầng dữ liệu: PostgreSQL 16 (H2 fallback), MongoDB 7.0, Redis Cache 7, Elasticsearch 8.13.
   - User Bookmark Feature: Thực thể `UserBookmark`, `BookmarkRepository`, `BookmarkService`, `BookmarkController` (`/api/bookmarks`).
-  - Kho tri thức chuẩn hóa 32+ cheatsheets chi tiết có sẵn trong `DataSeederService`.
+  - Kho tri thức chuẩn hóa **52+ cheatsheets** chi tiết có sẵn trong `DataSeederService`.
   - Global Exception Handler RFC 7807, OpenAPI 3 / Swagger.
-- **Frontend (Angular 19+ & TailwindCSS)**:
-  - Tách biệt rõ ràng 3 file độc lập (`.html`, `.css`, `.ts`) cho từng Component.
+- **Frontend (Angular 19+ Zoneless & SCSS Architecture)**:
+  - Kích hoạt Zoneless `provideExperimentalZonelessChangeDetection()`.
+  - Tách biệt rõ ràng 3 file độc lập (`.component.ts`, `.component.html`, `.component.scss`) cho từng Component.
+  - Xây dựng hệ thống SCSS Design System (`_variables.scss`, `_mixins.scss`, `includePaths`).
+  - Component tiêu biểu: `SnippetCardComponent` (`snippet-card.component.ts`, `.html`, `.scss`) sử dụng `input.required()`, `output()`, `computed()`, OnPush.
   - Sub-routing theo feature modules với tham số CRUD chung root (`/snippets`, `/snippets/new`, `/snippets/:id`, `/snippets/edit/:id`).
   - Command Palette (`Ctrl+K`), Interactive Query Builder, Side-by-Side Paradigm Matrix, MongoDB Aggregation Viewer, Bookmark Toggle & Filter.
 - **Kiểm Thử Biên Dịch**:
   - Backend: `.\mvnw.cmd test-compile` -> **BUILD SUCCESS (100%)**.
-  - Frontend: `npm run build` -> **BUILD SUCCESS (100% - 416.43 kB)**.
+  - Frontend: `npm run build` -> **BUILD SUCCESS (100% - 0 errors, 0 warnings)**.
 
 ---
 
