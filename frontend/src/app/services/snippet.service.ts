@@ -126,9 +126,97 @@ export class SnippetService {
   }
 
   loadMongoTemplates(): Observable<MongoTemplate[]> {
+    if (environment.production) {
+      const templates = this.getFallbackMongoTemplates();
+      this.mongoTemplates.set(templates);
+      return of(templates);
+    }
+
     return this.http.get<MongoTemplate[]>(`${this.baseUrl}/mongo-templates`).pipe(
-      catchError(() => of([])),
+      catchError(() => {
+        const templates = this.getFallbackMongoTemplates();
+        return of(templates);
+      }),
       tap((templates) => this.mongoTemplates.set(templates))
     );
+  }
+
+  private getFallbackMongoTemplates(): MongoTemplate[] {
+    return [
+      {
+        id: 'mongo-agg-1',
+        topic: 'mongo-aggregation-lookup-and-group',
+        technology: 'SPRING_BOOT_MONGODB',
+        scenario: 'Join Orders with Customers and compute Total Spent per Customer with conditional status',
+        springCode: {
+          mongoTemplate: `MatchOperation matchCompleted = Aggregation.match(Criteria.where("status").is("COMPLETED"));
+LookupOperation lookupCustomer = Aggregation.lookup("customers", "customerId", "_id", "customerDetails");
+UnwindOperation unwindCustomer = Aggregation.unwind("customerDetails");
+GroupOperation groupByCustomer = Aggregation.group("customerDetails._id")
+        .first("customerDetails.fullName").as("customerName")
+        .sum("totalAmount").as("totalSpent")
+        .count().as("orderCount");
+SortOperation sortBySpent = Aggregation.sort(Sort.Direction.DESC, "totalSpent");
+
+Aggregation aggregation = Aggregation.newAggregation(
+        matchCompleted, lookupCustomer, unwindCustomer, groupByCustomer, sortBySpent
+);
+AggregationResults<CustomerOrderSummaryDto> results = mongoTemplate.aggregate(
+        aggregation, "orders", CustomerOrderSummaryDto.class
+);
+return results.getMappedResults();`,
+          reactiveMongoTemplate: `return reactiveMongoTemplate.aggregate(aggregation, "orders", CustomerOrderSummaryDto.class);`,
+        },
+        rawQuery: {
+          pipeline: [
+            { $match: { status: 'COMPLETED' } },
+            { $lookup: { from: 'customers', localField: 'customerId', foreignField: '_id', as: 'customerDetails' } },
+            { $unwind: '$customerDetails' },
+            {
+              $group: {
+                _id: '$customerDetails._id',
+                customerName: { $first: '$customerDetails.fullName' },
+                totalSpent: { $sum: '$totalAmount' },
+                orderCount: { $sum: 1 },
+              },
+            },
+            { $sort: { totalSpent: -1 } },
+          ],
+        },
+        explanation: 'Multi-stage Aggregation pipeline combining $match filter, $lookup foreign collection join, $unwind array deconstruction, and $group accumulator in Spring Data MongoDB.',
+        tags: ['MongoDB', 'Aggregation', 'MongoTemplate', 'Lookup', 'Spring Boot'],
+        complexity: 'ADVANCED',
+      },
+      {
+        id: 'mongo-agg-2',
+        topic: 'mongo-dynamic-facet-search',
+        technology: 'SPRING_BOOT_MONGODB',
+        scenario: 'Faceted Search with Bucket categorization and Price Range analytics',
+        springCode: {
+          mongoTemplate: `FacetOperation facetOperation = Aggregation.facet(
+        Aggregation.match(Criteria.where("inStock").is(true)),
+        Aggregation.sortByCount("category")
+).as("categorizedCounts")
+.and(
+        Aggregation.bucket("price")
+                .withBoundaries(0, 50, 100, 500, 1000)
+                .withDefaultBucket("other")
+                .andOutputCount().as("count")
+).as("priceRanges");
+
+Aggregation agg = Aggregation.newAggregation(facetOperation);
+return mongoTemplate.aggregate(agg, "products", ProductFacetDto.class).getUniqueMappedResult();`,
+        },
+        rawQuery: {
+          $facet: {
+            categorizedCounts: [{ $sortByCount: '$category' }],
+            priceRanges: [{ $bucket: { groupBy: '$price', boundaries: [0, 50, 100, 500, 1000] } }],
+          },
+        },
+        explanation: 'Faceted Search ($facet) allows computing multiple parallel aggregation pipelines within a single database round-trip.',
+        tags: ['MongoDB', 'Facet', 'Bucket', 'Analytics', 'Spring Data'],
+        complexity: 'ADVANCED',
+      },
+    ];
   }
 }
