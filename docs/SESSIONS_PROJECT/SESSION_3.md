@@ -43,3 +43,11 @@
 
 ### 4. Lovable Integration
 - Tích hợp Lovable thông qua kết nối trực tiếp GitHub Repository và liên kết Supabase project `epmqnamfibmgdeoeguqj`.
+
+### 5. Khắc phục vấn đề gọi API localhost trên Vercel
+- **Nguyên nhân**: `angular.json` thiếu cấu hình `fileReplacements` cho môi trường production, dẫn đến Angular vẫn dùng `environment.ts` (`localhost:8080`).
+- **Khắc phục**:
+  1. Thêm `fileReplacements` trỏ sang `environment.prod.ts` trong `angular.json`.
+  2. Tạo dịch vụ [SupabaseService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/supabase.service.ts) để gọi trực tiếp Supabase REST API (`/rest/v1/snippets`, `/rest/v1/categories`) khi chạy trên Vercel.
+  3. Cập nhật [SnippetService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/snippet.service.ts), [SearchService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/search.service.ts), [BookmarkService](file:///e:/AI%20dev/techincal-reminding/frontend/src/app/services/bookmark.service.ts) hoạt động 100% độc lập trên Vercel và fallback thông minh.
+
