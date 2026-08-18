@@ -10,7 +10,7 @@ spring:
     url: ${SUPABASE_DB_URL:jdbc:postgresql://db.epmqnamfibmgdeoeguqj.supabase.co:5432/postgres?sslmode=require}
     driverClassName: org.postgresql.Driver
     username: ${SUPABASE_DB_USER:postgres}
-    password: ${SUPABASE_DB_PASSWORD:}
+    password: ${SUPABASE_DB_PASSWORD:Conheo_12conheo}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
